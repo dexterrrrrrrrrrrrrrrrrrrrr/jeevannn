@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Calendar, LogOut, RefreshCw } from "lucide-react";
+import { Calendar, LogOut, RefreshCw, CheckCircle, XCircle } from "lucide-react";
 import axios from "axios";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -44,7 +44,7 @@ const DoctorPortal = () => {
     }
   };
 
-  const confirmAppointment = async (appointmentId) => {
+const confirmAppointment = async (appointmentId) => {
     try {
       await axios.patch(`${API}/appointments/${appointmentId}`, {
         status: "Confirmed"
@@ -56,15 +56,28 @@ const DoctorPortal = () => {
     }
   };
 
+  const rejectAppointment = async (appointmentId) => {
+    try {
+      await axios.patch(`${API}/appointments/${appointmentId}`, {
+        status: "Rejected"
+      });
+      // Refresh the list
+      fetchAppointments();
+    } catch (error) {
+      console.error("Failed to reject appointment:", error);
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem('jeevan_user');
     navigate('/login');
   };
 
-  const getStatusBadge = (status) => {
+const getStatusBadge = (status) => {
     const styles = {
       'Pending': 'bg-gray-200 text-gray-700',
-      'Confirmed': 'bg-black text-white'
+      'Confirmed': 'bg-black text-white',
+      'Rejected': 'bg-red-100 text-red-800 border border-red-200'
     };
     return (
       <span className={`px-3 py-1 rounded-full text-xs font-medium ${styles[status] || 'bg-gray-200'}`}>
@@ -138,18 +151,37 @@ const DoctorPortal = () => {
                     </div>
                   </div>
                   
-                  {appointment.status === 'Pending' && (
-                    <Button
-                      onClick={() => confirmAppointment(appointment.id)}
-                      className="bg-black text-white hover:bg-gray-800"
-                    >
-                      Confirm Appointment
-                    </Button>
+{appointment.status === 'Pending' && (
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={() => confirmAppointment(appointment.id)}
+                        className="bg-black text-white hover:bg-gray-800 flex-1"
+                      >
+                        <CheckCircle className="h-4 w-4 mr-2" />
+                        Accept
+                      </Button>
+                      <Button
+                        onClick={() => rejectAppointment(appointment.id)}
+                        variant="outline"
+                        className="border-black hover:bg-gray-100 flex-1"
+                      >
+                        <XCircle className="h-4 w-4 mr-2" />
+                        Reject
+                      </Button>
+                    </div>
                   )}
                   
                   {appointment.status === 'Confirmed' && (
-                    <div className="text-sm text-green-600 font-medium">
-                      ✓ Confirmed
+                    <div className="text-sm text-green-600 font-medium flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4" />
+                      ✓ Accepted
+                    </div>
+                  )}
+                  
+                  {appointment.status === 'Rejected' && (
+                    <div className="text-sm text-red-600 font-medium flex items-center gap-2">
+                      <XCircle className="h-4 w-4" />
+                      ✗ Rejected
                     </div>
                   )}
                 </div>
