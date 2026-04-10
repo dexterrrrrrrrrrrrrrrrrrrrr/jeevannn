@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Calendar, Clock, User, ShoppingCart, Heart, CheckCircle, X, ArrowLeft } from "lucide-react";
+import { Calendar, Clock, User, ShoppingCart, Heart, CheckCircle, X, ArrowLeft, Eye } from "lucide-react";
 import axios from "axios";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -285,10 +285,11 @@ const CareNetwork = ({ onClose }) => {
         {/* Tabs */}
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex gap-4 border-b border-gray-200">
-            {[
+              {[
               { id: "doctors", label: "Consult Doctor" },
               { id: "products", label: "Buy Products" },
-              { id: "help", label: "Sponsored Help" }
+              { id: "help", label: "Sponsored Help" },
+              { id: "eye-prediction", label: "Eye Disease Prediction" }
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -405,6 +406,38 @@ const CareNetwork = ({ onClose }) => {
                   </div>
                 </Card>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* Eye Disease Prediction Tab */}
+        {activeTab === "eye-prediction" && (
+          <div>
+            <h2 className="text-3xl font-bold mb-6">Eye Disease Prediction</h2>
+            <div className="grid md:grid-cols-2 gap-6">
+              <Card className="p-8 border-2 border-gray-200 hover:border-black transition-all md:col-span-2 text-center">
+                <Eye className="h-16 w-16 mx-auto mb-6 text-black" />
+                <h3 className="text-2xl font-semibold mb-4">AI-Powered Myopia Prediction</h3>
+                <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+                  Get instant eye disease risk assessment and early myopia detection using advanced AI analysis. Upload an eye image for personalized risk prediction and recommendations.
+                </p>
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-black text-white hover:bg-gray-800 text-lg px-8 py-6 w-full md:w-auto font-semibold"
+                >
+                  <a
+                    href="https://eye-disease-prediction-ffdexterrrrrrrrrrrrr.streamlit.app/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Start Prediction
+                  </a>
+                </Button>
+                <p className="text-sm text-gray-500 mt-4">
+                  Opens in new tab • Fast & accurate AI analysis
+                </p>
+              </Card>
             </div>
           </div>
         )}
