@@ -50,7 +50,7 @@ def init_db():
             doctor_name TEXT NOT NULL,
             date TEXT NOT NULL,
             time TEXT NOT NULL,
-            status TEXT NOT NULL DEFAULT 'Pending' CHECK(status IN ('Pending', 'Confirmed'))
+status TEXT NOT NULL DEFAULT 'Pending' CHECK(status IN ('Pending', 'Confirmed', 'Rejected'))
         )
     ''')
     
